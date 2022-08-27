@@ -5,8 +5,9 @@ body{
     justify-content: center;
     align-items: center;
     font-family: 'RioGrande';
-    background-image: url('../img/icons/bg.jpg');
+    background-image: url('../img/icons/bg2.jpg');
     background-size: cover;
+    background-repeat: no-repeat;
 }
 
 

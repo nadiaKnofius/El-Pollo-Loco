@@ -7,6 +7,7 @@ height = 250;
 
     constructor(path){
         super().loadImage(path);
-        this.x = 100 + Math.random() * 500;
+        this.x = Math.random() * 500;
+        this.moveLeft();
     }
 }
