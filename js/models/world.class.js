@@ -4,6 +4,7 @@ class World {
     enemies = level.enemies;
     boxes = level.boxes;
     coins = level.coins;
+    bottles = level.bottles;
     ctx;
     canvas;
     background = level.background;
@@ -31,6 +32,7 @@ class World {
         this.drawCharacter();
         this.drawEnemies();
         this.drawCoins();
+        this.drawBottles();
         this.ctx.translate(-this.camera_x, 0)
         let self = this;
         requestAnimationFrame(function () {
@@ -52,6 +54,10 @@ class World {
 
     drawCoins() {
         this.addObjectsFromArrayToMap(this.coins);  
+    }
+
+    drawBottles() {
+        this.addObjectsFromArrayToMap(this.bottles);  
     }
 
     drawClouds() {
@@ -93,6 +99,7 @@ class World {
             this.ctx.scale(-1, 1);
             obj.x = obj.x * -1;
         }
+        console.log(obj);
         this.ctx.drawImage(obj.img, obj.x, obj.y, obj.width, obj.height);
         if (obj.directionLeft){
             obj.x = obj.x * -1;

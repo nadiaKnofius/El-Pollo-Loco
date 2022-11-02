@@ -27,10 +27,6 @@ class Endboss extends MovableObjects {
     }
 
     animateImages() {
-        // setInterval(() => {
-        //     this.moveLeft();
-        // }, 1000 / 60);
-
         setInterval(() => {
             this.animateImagesDependingOnAction(this.imagesAlert);
         }, 100);

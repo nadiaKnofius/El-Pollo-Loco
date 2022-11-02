@@ -101,7 +101,6 @@ class Character extends MovableObjects {
                 this.directionLeft = true;
                 break;
             case this.world.keyboard.jump:
-                console.log(this.y);
                 this.jump(100);
                 this.directionLeft = false;
                 break;
