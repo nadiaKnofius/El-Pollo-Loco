@@ -1,25 +1,15 @@
 class World {
-
-    clouds = [
-        new Cloud('../img/5_background/layers/4_clouds/1.png')];
+    clouds = level.clouds;
     character = new Character();
-    enemies = [
-        new Chicken('../img/3_enemies_chicken/chicken_normal/1_walk/2_w.png'),
-        new Chicken('../img/3_enemies_chicken/chicken_normal/1_walk/2_w.png'),
-        new Chicken('../img/3_enemies_chicken/chicken_normal/1_walk/2_w.png'),
-        new Chicken('../img/3_enemies_chicken/chicken_normal/1_walk/2_w.png'),
-    ];
+    enemies = level.enemies;
+    boxes = level.boxes;
+    coins = level.coins;
     ctx;
     canvas;
-    background = [
-        new Background('../img/5_background/layers/air.png'),
-        new Background('../img/5_background/layers/3_third_layer/1.png'),
-        new Background('../img/5_background/layers/2_second_layer/1.png'),
-        new Background('../img/5_background/layers/1_first_layer/1.png')
-        
-    ];
+    background = level.background;
     keyboard;
     camera_x;
+    
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext('2d');
         this.canvas = canvas;
@@ -27,7 +17,6 @@ class World {
         this.draw();
         this.setCharacterWorld();
     }
-
 
     /**
      * calls different draw functions
@@ -37,9 +26,11 @@ class World {
         this.clearCanvas();
         this.ctx.translate(this.camera_x, 0);
         this.drawBackground();
+        this.drawBox();
         this.drawClouds();
         this.drawCharacter();
         this.drawEnemies();
+        this.drawCoins();
         this.ctx.translate(-this.camera_x, 0)
         let self = this;
         requestAnimationFrame(function () {
@@ -59,6 +50,10 @@ class World {
         this.addObjectsFromArrayToMap(this.enemies);  
     }
 
+    drawCoins() {
+        this.addObjectsFromArrayToMap(this.coins);  
+    }
+
     drawClouds() {
         this.addObjectsFromArrayToMap(this.clouds);  
     }
@@ -67,6 +62,15 @@ class World {
         this.addObjectsFromArrayToMap(this.background);    
     }
 
+    drawBox() {
+       this.addBoxesToMap(this.boxes);
+    }
+
+    addBoxesToMap(obj){
+        obj.forEach(o =>{
+            this.drawInMap(o);
+        })     
+    }
 
     /**
      * calls function addToMap for each object in array 
@@ -94,6 +98,11 @@ class World {
             obj.x = obj.x * -1;
             this.ctx.restore();
         }
+    }
+
+    drawInMap(obj) {
+        this.ctx.fillStyle = obj.color;
+        this.ctx.fillRect(obj.x, obj.y, obj.width, obj.height);
     }
 
     setCharacterWorld() {

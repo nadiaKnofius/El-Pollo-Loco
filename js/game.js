@@ -18,7 +18,7 @@ document.addEventListener("keydown", (event) => {
             break;
         case event.code == 'KeyW':
             keyboard.jump = true;
-            world.character.x = world.character.y + 3;
+            world.character.y = world.character.y + 3;
             break;
         case event.code == 'Space':
             keyboard.shoot = true;
