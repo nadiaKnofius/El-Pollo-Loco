@@ -6,20 +6,24 @@ const level = new Level(
         new Chicken(1000),
         new Chicken(800),
         new Chicken(1200),
-        new Chicken(1200),
-        new Chicken(3000),
-        new Chicken(3000),
+        new Chicken(1800),
         new Chicken(4000),
+        new Chicken(5000),
+        new Chicken(6000),
         new Endboss()
     ],
     [
-        new Cloud(100),
-        new Cloud(800),
+        new Cloud(500),
         new Cloud(1200),
-        new Cloud(1500),
-        new Cloud(1900),
-        new Cloud(2900),
-        new Cloud(3500),
+        new Cloud(2000),
+        new Cloud(2500),
+        new Cloud(3000),
+        new Cloud(4500),
+        new Cloud(5000),
+        new Cloud(7000),
+        new Cloud(8000),
+        new Cloud(9000),
+        new Cloud(10000),
     ],
     [
         new Background('img/5_background/layers/air.png', 0),
@@ -78,9 +82,10 @@ const level = new Level(
         new Coin(1230, 70),
     ],
     [
-        new Bottle('img/6_salsa_bottle/1_salsa_bottle_on_ground.png', 100),
-        new Bottle('img/6_salsa_bottle/1_salsa_bottle_on_ground.png', 200),
-        new Bottle('img/6_salsa_bottle/1_salsa_bottle_on_ground.png', 300),
-        new Bottle('img/6_salsa_bottle/1_salsa_bottle_on_ground.png', 500)
+        new Bottle('img/6_salsa_bottle/1_salsa_bottle_on_ground.png', 400),
+        new Bottle('img/6_salsa_bottle/1_salsa_bottle_on_ground.png', 800),
+        new Bottle('img/6_salsa_bottle/2_salsa_bottle_on_ground.png', 1220),
+        new Bottle('img/6_salsa_bottle/1_salsa_bottle_on_ground.png', 1500),
+        new Bottle('img/6_salsa_bottle/2_salsa_bottle_on_ground.png', 2500)
     ]
 );

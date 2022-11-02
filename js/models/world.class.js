@@ -99,8 +99,12 @@ class World {
             this.ctx.scale(-1, 1);
             obj.x = obj.x * -1;
         }
-        console.log(obj);
-        this.ctx.drawImage(obj.img, obj.x, obj.y, obj.width, obj.height);
+        try {
+            this.ctx.drawImage(obj.img, obj.x, obj.y, obj.width, obj.height);
+        }
+        catch(e){
+            console.log('could not load image:', obj.img.src);
+        }
         if (obj.directionLeft){
             obj.x = obj.x * -1;
             this.ctx.restore();

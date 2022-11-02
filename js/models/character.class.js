@@ -62,7 +62,7 @@ class Character extends MovableObjects {
     constructor() {
         super().loadImage('img/2_character_pepe/1_idle/idle/I-1.png');
         this.loadAllImages();
-        this.x = 150;
+        this.x = 250;
         this.y = this.y_ground;
         this.width = 140;
         this.height = 250;
@@ -80,7 +80,7 @@ class Character extends MovableObjects {
         }, 100);
     }
 
-      
+
     loadAllImages() {
         this.loadImages(this.imagesIdle);
         this.loadImages(this.imagesLongIdle);
@@ -100,8 +100,10 @@ class Character extends MovableObjects {
                 this.moveLeft();
                 this.directionLeft = true;
                 break;
-            case this.world.keyboard.jump:
-                this.jump(100);
+            case this.world.keyboard.jump && !this.isAboveGround():
+                this.speed_y = 20;
+                this.jump(150);
+                console.log(this);
                 this.directionLeft = false;
                 break;
         }
@@ -114,12 +116,22 @@ class Character extends MovableObjects {
             case this.world.keyboard.right || this.world.keyboard.left:
                 this.animateImagesDependingOnAction(this.imagesWalking);
                 break;
-            case this.isAboveGround():
+            case this.isAboveGround() && this.world.keyboard.jump:
                 this.animateImagesDependingOnAction(this.imagesJumping);
                 break;
-            default:
-                this.animateImagesDependingOnAction(this.imagesIdle);
+            case this.checkTimeAfterLastAction():
+                this.animateImagesDependingOnAction(this.imagesLongIdle)
                 break;
+            default: 
+            this.animateImagesDependingOnAction(this.imagesIdle); 
+        }
+    }
+
+    checkTimeAfterLastAction() {
+        let currentTime = new Date().getTime();
+        let differenceTime = currentTime - timeAfterLastAction;
+        if (differenceTime > 4000) {
+            return true;
         }
     }
 }

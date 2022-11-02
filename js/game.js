@@ -1,6 +1,7 @@
 let canvas;
 let world;
 let keyboard;
+let timeAfterLastAction;
 
 function init() {
     canvas = document.getElementById('canvas');
@@ -12,17 +13,20 @@ document.addEventListener("keydown", (event) => {
     switch (true) {
         case event.code == 'KeyD':
             keyboard.right = true;
+            timeAfterLastAction = new Date().getTime();
             break;
         case event.code == 'KeyA':
             keyboard.left = true;
+            timeAfterLastAction = new Date().getTime();
             break;
         case event.code == 'KeyW':
             keyboard.jump = true;
             world.character.y = world.character.y + 3;
+            timeAfterLastAction = new Date().getTime();
             break;
         case event.code == 'Space':
             keyboard.shoot = true;
-            console.log(keyboard.shoot);
+            timeAfterLastAction = new Date().getTime();
             break;
     }
 })
@@ -31,16 +35,19 @@ document.addEventListener("keyup", (event) => {
     switch (true) {
         case event.code == 'KeyD':
             keyboard.right = false;
+            timeAfterLastAction = new Date().getTime();
             break;
         case event.code == 'KeyA':
             keyboard.left = false;
+            timeAfterLastAction = new Date().getTime();
             break;
         case event.code == 'KeyW':
             keyboard.jump = false;
+            timeAfterLastAction = new Date().getTime();
             break;
         case event.code == 'Space':
             keyboard.shoot = false;
-            console.log(keyboard.shoot);
+            timeAfterLastAction = new Date().getTime();
             break;
     }
 })
