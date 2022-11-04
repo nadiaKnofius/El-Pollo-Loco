@@ -1,6 +1,7 @@
 class World {
     clouds = level.clouds;
     character = new Character();
+    statusBars = level.statusBars;
     enemies = level.enemies;
     boxes = level.boxes;
     coins = level.coins;
@@ -10,7 +11,7 @@ class World {
     background = level.background;
     keyboard;
     camera_x;
-    
+
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext('2d');
         this.canvas = canvas;
@@ -29,18 +30,79 @@ class World {
         this.drawBackground();
         this.drawBox();
         this.drawClouds();
-        this.drawCharacter();
         this.drawEnemies();
         this.drawCoins();
         this.drawBottles();
+        this.drawStatusBars();
+        this.drawCharacter();
         this.ctx.translate(-this.camera_x, 0)
         let self = this;
-        requestAnimationFrame(function () {
+        this.checkCollisions();
+        requestAnimationFrame(() => {
             self.draw();
         });
     }
 
-    clearCanvas(){
+
+    checkCollisions() {
+        // setInterval(this.character.checkCollisionWithCollectableThings, 200, level.bottles, this.character);
+        // setInterval(this.character.checkCollisionWithCollectableThings, 200, level.coins, this.character);
+        setInterval(() => {
+            level.bottles.forEach((bottle, i) => {
+                if (this.character.isColliding(bottle)) {
+                    level.statusBars.forEach(statusBar => {
+                        if (statusBar.type == 'bottle' && statusBar.value + 20 <= 100) {
+                            level.bottles.splice(i, 1);
+                            statusBar.value += 20;
+                            statusBar.img.src = `img/7_statusbars/1_statusbar/3_statusbar_bottle/green/${statusBar.value}.png`;
+                            this.character.playSound(this.character.audio.audioBottle, 0.3);
+                        }
+                    });
+                };
+            });
+        }, 200);
+
+        setInterval(() => {
+            level.coins.forEach((coin, i) => {
+                if (this.character.isColliding(coin)) {
+                    level.statusBars.forEach(statusBar => {
+                        if (statusBar.type == 'coin' && statusBar.value + 20 <= 100) {
+                            level.coins.splice(i, 1);
+                            statusBar.value += 20;
+                            statusBar.img.src = `img/7_statusbars/1_statusbar/1_statusbar_coin/green/${statusBar.value}.png`
+                            this.character.playSound(this.character.audio.audioCoins, 0.3);
+                        }
+                    });
+                };
+            });
+        }, 200);
+
+        // setInterval(() => {
+        //     level.enemies.forEach((chicken, i) => {
+        //         if(this.character.isDead(this.character)) this.character.animateImagesDependingOnAction(this.character.imagesDead);
+        //         if (this.character.isColliding(chicken) && chicken.alive) {
+        //             level.statusBars.forEach(statusBar => {
+        //                 if (statusBar.type == 'health') {
+        //                     if(this.character.energy >= 0.0001) this.character.energy -= 0.01;
+        //                     this.character.playSound(this.character.audio.audioChicken, 0.3);
+        //                     this.character.checkEnergyForStatusBar(this.character, statusBar);
+        //                     if(!this.character.isDead(this.character)) this.character.animateImagesDependingOnAction(this.character.imagesHurt);
+        //                     // chicken.animateImagesDependingOnAction(level.enemies[i].imagesDead[chicken.type]);
+        //                 }
+        //             });
+        //         };
+        //     });
+        // }, 200);
+    }
+
+
+   
+
+
+
+
+
+    clearCanvas() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     }
 
@@ -49,43 +111,50 @@ class World {
     }
 
     drawEnemies() {
-        this.addObjectsFromArrayToMap(this.enemies);  
+        this.addObjectsFromArrayToMap(this.enemies);
     }
 
     drawCoins() {
-        this.addObjectsFromArrayToMap(this.coins);  
+        this.addObjectsFromArrayToMap(this.coins);
     }
 
     drawBottles() {
-        this.addObjectsFromArrayToMap(this.bottles);  
+        this.addObjectsFromArrayToMap(this.bottles);
     }
 
     drawClouds() {
-        this.addObjectsFromArrayToMap(this.clouds);  
+        this.addObjectsFromArrayToMap(this.clouds);
     }
 
     drawBackground() {
-        this.addObjectsFromArrayToMap(this.background);    
+        this.addObjectsFromArrayToMap(this.background);
+    }
+
+    drawStatusBars() {
+        this.statusBars.forEach(statusBar => {
+            if (this.camera_x) statusBar.x = 20 - this.camera_x;
+        })
+        this.addObjectsFromArrayToMap(this.statusBars);
     }
 
     drawBox() {
-       this.addBoxesToMap(this.boxes);
+        this.addBoxesToMap(this.boxes);
     }
 
-    addBoxesToMap(obj){
-        obj.forEach(o =>{
+    addBoxesToMap(obj) {
+        obj.forEach(o => {
             this.drawInMap(o);
-        })     
+        })
     }
 
     /**
      * calls function addToMap for each object in array 
      * @param {object} obj 
      */
-    addObjectsFromArrayToMap(obj){
-        obj.forEach(o =>{
+    addObjectsFromArrayToMap(obj) {
+        obj.forEach(o => {
             this.addToMap(o);
-        })     
+        })
     }
 
     /**
@@ -93,7 +162,7 @@ class World {
      * @param {object} obj 
      */
     addToMap(obj) {
-        if (obj.directionLeft){
+        if (obj.directionLeft) {
             this.ctx.save();
             this.ctx.translate(obj.width, 0);
             this.ctx.scale(-1, 1);
@@ -101,11 +170,12 @@ class World {
         }
         try {
             this.ctx.drawImage(obj.img, obj.x, obj.y, obj.width, obj.height);
+            if (debugModus) this.startDebugModus(obj);
         }
-        catch(e){
+        catch (e) {
             console.log('could not load image:', obj.img.src);
         }
-        if (obj.directionLeft){
+        if (obj.directionLeft) {
             obj.x = obj.x * -1;
             this.ctx.restore();
         }
@@ -118,5 +188,17 @@ class World {
 
     setCharacterWorld() {
         this.character.world = this;
+    }
+
+
+    startDebugModus(obj) {
+        if (Character.prototype.isPrototypeOf(obj) || Chicken.prototype.isPrototypeOf(obj)) {
+            this.ctx.beginPath();
+            this.ctx.lineWidth = '5';
+            this.ctx.strokeStyle = 'white';
+            this.ctx.rect(obj.x, obj.y + obj.offsetY, obj.width - obj.offsetX, obj.height - obj.offsetY);
+            this.ctx.stroke();
+            this.ctx.closePath();
+        }
     }
 }

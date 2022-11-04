@@ -12,6 +12,10 @@ class MovableObjects {
     directionLeft = false;
     speed_y = 0;
     acceleration = 1;
+    offsetX = 0;
+    offsetY = 0;
+    alive = true;
+    energy;
 
     loadImage(path) {
         this.img = new Image();
@@ -53,9 +57,9 @@ class MovableObjects {
         setInterval(() => {
             if (this.isAboveGround() || this.speed_y > 0) {
                 this.y -= this.speed_y;
-                if (this.checkDifferenceYToGroundY()){
+                if (this.checkDifferenceYToGroundY()) {
                     this.y = this.y_ground;
-                }else{
+                } else {
                     this.speed_y -= this.acceleration;
                 }
             }
@@ -63,6 +67,63 @@ class MovableObjects {
     }
 
     checkDifferenceYToGroundY() {
-       return this.y - (this.speed_y -= this.acceleration) > this.y_ground;
+        return this.y - (this.speed_y -= this.acceleration) > this.y_ground;
     }
+
+
+    isColliding(obj) {
+        return this.x + this.width - this.offsetX > obj.x &&
+            this.y + this.height + this.offsetY > obj.y &&
+            this.x < obj.x &&
+            this.y + this.offsetY < obj.y + obj.height
+    }
+
+
+    /**
+     * sets volume and plays sound
+     * @param {object} audioObj 
+     * @param {number} volume //decimal, loudness of sound
+     */
+    playSound(audioObj, volume) {
+        audioObj.volume = volume;
+        audioObj.play();
+    }
+
+
+    checkEnergyForStatusBar(obj, statusBar) {
+        switch (true) {
+            case obj.energy > 80:
+                obj.setHealthStatusBar(statusBar, 100);
+                break;
+            case obj.energy <= 80 && obj.energy >= 60:
+                obj.setHealthStatusBar(statusBar, 80);
+                break;
+            case obj.energy < 60 && obj.energy >= 40:
+                obj.setHealthStatusBar(statusBar, 60);
+                break;
+            case obj.energy < 40 && obj.energy >= 20:
+                obj.setHealthStatusBar(statusBar, 40);
+                break;
+            case obj.energy < 20 && obj.energy > 0:
+                obj.setHealthStatusBar(statusBar, 20);
+                break;
+            case obj.energy <= 0:
+                obj.setHealthStatusBar(statusBar, 0);
+        }
+    }
+
+
+    setHealthStatusBar(statusBar, statusBarValue) {
+        statusBar.value = statusBarValue;
+        statusBar.img.src = `img/7_statusbars/1_statusbar/2_statusbar_health/green/${statusBar.value}.png`;
+    }
+
+
+    isDead(obj){
+        if(obj.energy <= 0) {
+            obj.alive = false;
+            return true;
+        }
+    }
+
 }

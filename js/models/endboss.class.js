@@ -26,9 +26,9 @@ class Endboss extends MovableObjects {
         this.animateImages();
     }
 
+
+
     animateImages() {
-        setInterval(() => {
-            this.animateImagesDependingOnAction(this.imagesAlert);
-        }, 100);
+        setIntervalIds(this.animateImagesDependingOnAction.bind(this, this.imagesAlert), 100);
     }
 }

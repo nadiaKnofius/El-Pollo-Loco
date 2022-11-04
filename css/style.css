@@ -14,9 +14,36 @@ body{
 
 
 canvas{
-    background-color: #729bc9;
+    background-color: black;
 }
 
 h1{
     font-size: 60px;
+}
+
+.d-none{
+    display: none;
+}
+
+.startscreen-container{
+    position: relative;
+}
+
+.startscreen{
+    width: 720px;
+    height: 480px;
+}
+
+.controls{
+    position: absolute;
+    top: 16px;
+    right: 24px;
+    cursor: pointer;
+    width: 64px;
+    height: 64px;
+}
+
+.controls:hover{
+    width: 74px;
+    height: 74px;
 }

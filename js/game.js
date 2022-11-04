@@ -2,6 +2,8 @@ let canvas;
 let world;
 let keyboard;
 let timeAfterLastAction;
+let intervalIds = [];
+let debugModus = false;
 
 function init() {
     canvas = document.getElementById('canvas');
@@ -51,3 +53,9 @@ document.addEventListener("keyup", (event) => {
             break;
     }
 })
+
+
+function setIntervalIds(fn, time) {
+    let intervalId = setInterval(fn, time);
+    intervalIds.push(intervalId);
+}

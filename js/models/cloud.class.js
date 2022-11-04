@@ -10,13 +10,17 @@ imagesCloud = [
     constructor(x){
         super().loadImage(this.imagesCloud[0]);
         this.x = Math.random() * x;
+        this.setSpeed();
         this.animateClouds();
     }
 
 
     animateClouds(){
-        setInterval(()=> {
-            this.x -= 6 * Math.random();
-        }, 200);
+        setIntervalIds(this.moveLeft.bind(this), 200);
+    }
+
+
+    setSpeed() {
+        this.speed = 6 * Math.random();
     }
 }

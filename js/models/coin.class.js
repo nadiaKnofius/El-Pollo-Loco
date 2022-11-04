@@ -18,8 +18,6 @@ class Coin extends MovableObjects {
     }
 
     animateImages() {
-        setInterval(() => {
-            this.animateImagesDependingOnAction(this.images);
-        }, 100);
+        setIntervalIds(this.animateImagesDependingOnAction(this.images), 100);
     }
 }

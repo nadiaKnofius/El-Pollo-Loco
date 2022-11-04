@@ -12,8 +12,12 @@
 </head>
 <body onload="init()">
     <h1>EL Pollo Loco</h1>
-    <canvas id="canvas" width="720" height="480"></canvas>
-
+    <canvas id="canvas" width="720" height="480" class="d-none"></canvas>
+    <div id="startscreen" class="startscreen-container">
+        <img class="startscreen" src="img/9_intro_outro_screens/start/startscreen_1.png" alt="">
+        <img class="controls" src="img/icons/tastatur.png" alt="">
+        <!-- <input type="range"> -->
+    </div>
     <script src="js/models/movableobjects.class.js"></script>
     <script src="js/models/character.class.js"></script>
     <script src="js/models/chicken.class.js"></script>
@@ -25,6 +29,7 @@
     <script src="js/models/box.class.js"></script>
     <script src="js/models/coin.class.js"></script>
     <script src="js/models/bottle.class.js"></script>
+    <script src="js/models/statusbar.class.js"></script>
     <script src="js/models/level.class.js"></script>
     <script src="js/levels/level1.js"></script>
 </body>
