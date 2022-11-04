@@ -69,11 +69,10 @@ class Character extends MovableObjects {
     y_ground = 170;
     offsetX = 20;
     offsetY = 85;
-    energy = 100;
     constructor() {
         super().loadImage(this.imagesIdle[0]);
         this.loadAllImages();
-        this.x = 10;
+        this.x = 120;
         this.y = this.y_ground;
         this.width = 140;
         this.height = 250;
@@ -100,7 +99,6 @@ class Character extends MovableObjects {
     checkKeyboardForMoving() {
         switch (true) {
             case this.world.keyboard.jump && !this.isAboveGround():
-                this.speed_y = 20;
                 this.jump(150);
                 this.directionLeft = false;
                 break;
@@ -108,7 +106,7 @@ class Character extends MovableObjects {
                 this.moveRight();
                 this.directionLeft = false;
                 break;
-            case this.world.keyboard.left && this.x >= 2:
+            case this.world.keyboard.left && this.x >= 90:
                 this.moveLeft();
                 this.directionLeft = true;
                 break;

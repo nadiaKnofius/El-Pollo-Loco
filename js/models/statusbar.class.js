@@ -1,7 +1,7 @@
 class StatusBar extends MovableObjects {
     width = 200;
     height = 60;
-    x = 50;
+    x = -80;
     value;
     type;
     images = {

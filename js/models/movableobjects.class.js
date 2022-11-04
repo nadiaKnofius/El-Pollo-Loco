@@ -15,7 +15,8 @@ class MovableObjects {
     offsetX = 0;
     offsetY = 0;
     alive = true;
-    energy;
+    energy = 100;
+    audio;
 
     loadImage(path) {
         this.img = new Image();
@@ -46,6 +47,7 @@ class MovableObjects {
     }
 
     jump(y_newValue) {
+        this.speed_y = 20;
         this.y = y_newValue;
     }
 
@@ -116,6 +118,22 @@ class MovableObjects {
     setHealthStatusBar(statusBar, statusBarValue) {
         statusBar.value = statusBarValue;
         statusBar.img.src = `img/7_statusbars/1_statusbar/2_statusbar_health/green/${statusBar.value}.png`;
+    }
+
+
+    setStatusBar(obj){
+        obj.statusBars.forEach(statusBar => {
+            if (statusBar.type == 'health') {
+               obj.character.checkEnergyForStatusBar(obj.character, statusBar);
+            }
+        }); 
+    }
+
+    hit() {
+        this.energy -= 2;
+        if(this.energy < 0) this.energy = 0;
+        this.animateImagesDependingOnAction(this.imagesHurt);
+        timeAfterLastAction = new Date().getTime();
     }
 
 

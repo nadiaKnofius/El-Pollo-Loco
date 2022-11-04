@@ -20,6 +20,10 @@ class Chicken extends MovableObjects {
         'normal': ['img/3_enemies_chicken/chicken_normal/2_dead/dead.png'],
         'small': ['img/3_enemies_chicken/chicken_small/2_dead/dead.png']};
 
+    audio = {
+        audioChicken: new Audio('audio/chicken.mp3')
+    };    
+
     constructor(x, type) {
         super().loadImage(this.imagesWalking[type][0]);
         this.loadImages(this.imagesWalking[type]);
@@ -28,11 +32,12 @@ class Chicken extends MovableObjects {
         this.x = 200 + Math.random() * x;
         this.speed = 0.15 + Math.random() * 0.3;
         this.setValuesOfSmallChicken();
-        this.animateImages();
+        this.animate();
     }
 
-    animateImages() {
+    animate() {
         setIntervalIds(this.moveLeft.bind(this), 1000/60);
+        setIntervalIds(this.animateSound.bind(this), 200);
         setIntervalIds(this.isChickenAlive.bind(this), 100);
     }
 
@@ -40,6 +45,13 @@ class Chicken extends MovableObjects {
     isChickenAlive(){
         if(!this.isDead(this)) this.animateImagesDependingOnAction(this.imagesWalking[this.type]);
         if(this.isDead(this)) this.animateImagesDependingOnAction(this.imagesDead[this.type]);
+    }
+
+
+    animateSound() {
+        if(this.isColliding(world.character)){
+            this.playSound(this.audio.audioChicken, 0.3);
+        }
     }
     
 

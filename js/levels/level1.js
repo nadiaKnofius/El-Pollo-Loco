@@ -1,4 +1,8 @@
-const level = new Level(
+let level; 
+
+function initLevel(){
+    
+level = new Level(
     [
         new Chicken(500, 'normal'),
         new Chicken(700, 'normal'),
@@ -99,3 +103,5 @@ const level = new Level(
         new StatusBar('bottle')
     ]
 );
+
+}

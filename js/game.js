@@ -8,7 +8,6 @@ let debugModus = false;
 function init() {
     canvas = document.getElementById('canvas');
     keyboard = new Keyboard();
-    world = new World(canvas, keyboard);
 }
 
 document.addEventListener("keydown", (event) => {
@@ -58,4 +57,12 @@ document.addEventListener("keyup", (event) => {
 function setIntervalIds(fn, time) {
     let intervalId = setInterval(fn, time);
     intervalIds.push(intervalId);
+}
+
+
+function startGame(){
+    document.getElementById('startscreen').classList.add('d-none');
+    document.getElementById('canvas').classList.remove('d-none');
+    initLevel();
+    world = new World(canvas, keyboard);
 }

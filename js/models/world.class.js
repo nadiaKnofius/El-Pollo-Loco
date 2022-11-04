@@ -17,6 +17,7 @@ class World {
         this.canvas = canvas;
         this.keyboard = keyboard;
         this.draw();
+        this.checkCollisions();
         this.setCharacterWorld();
     }
 
@@ -26,7 +27,7 @@ class World {
      */
     draw() {
         this.clearCanvas();
-        this.ctx.translate(this.camera_x, 0);
+        this.ctx.translate(this.camera_x + 80, 0);
         this.drawBackground();
         this.drawBox();
         this.drawClouds();
@@ -35,9 +36,8 @@ class World {
         this.drawBottles();
         this.drawStatusBars();
         this.drawCharacter();
-        this.ctx.translate(-this.camera_x, 0)
+        this.ctx.translate(-this.camera_x - 80, 0)
         let self = this;
-        this.checkCollisions();
         requestAnimationFrame(() => {
             self.draw();
         });
@@ -48,11 +48,11 @@ class World {
         // setInterval(this.character.checkCollisionWithCollectableThings, 200, level.bottles, this.character);
         // setInterval(this.character.checkCollisionWithCollectableThings, 200, level.coins, this.character);
         setInterval(() => {
-            level.bottles.forEach((bottle, i) => {
+            this.bottles.forEach((bottle, i) => {
                 if (this.character.isColliding(bottle)) {
-                    level.statusBars.forEach(statusBar => {
+                    this.statusBars.forEach(statusBar => {
                         if (statusBar.type == 'bottle' && statusBar.value + 20 <= 100) {
-                            level.bottles.splice(i, 1);
+                            this.bottles.splice(i, 1);
                             statusBar.value += 20;
                             statusBar.img.src = `img/7_statusbars/1_statusbar/3_statusbar_bottle/green/${statusBar.value}.png`;
                             this.character.playSound(this.character.audio.audioBottle, 0.3);
@@ -63,11 +63,11 @@ class World {
         }, 200);
 
         setInterval(() => {
-            level.coins.forEach((coin, i) => {
+            this.coins.forEach((coin, i) => {
                 if (this.character.isColliding(coin)) {
-                    level.statusBars.forEach(statusBar => {
+                    this.statusBars.forEach(statusBar => {
                         if (statusBar.type == 'coin' && statusBar.value + 20 <= 100) {
-                            level.coins.splice(i, 1);
+                            this.coins.splice(i, 1);
                             statusBar.value += 20;
                             statusBar.img.src = `img/7_statusbars/1_statusbar/1_statusbar_coin/green/${statusBar.value}.png`
                             this.character.playSound(this.character.audio.audioCoins, 0.3);
@@ -77,26 +77,18 @@ class World {
             });
         }, 200);
 
-        // setInterval(() => {
-        //     level.enemies.forEach((chicken, i) => {
-        //         if(this.character.isDead(this.character)) this.character.animateImagesDependingOnAction(this.character.imagesDead);
-        //         if (this.character.isColliding(chicken) && chicken.alive) {
-        //             level.statusBars.forEach(statusBar => {
-        //                 if (statusBar.type == 'health') {
-        //                     if(this.character.energy >= 0.0001) this.character.energy -= 0.01;
-        //                     this.character.playSound(this.character.audio.audioChicken, 0.3);
-        //                     this.character.checkEnergyForStatusBar(this.character, statusBar);
-        //                     if(!this.character.isDead(this.character)) this.character.animateImagesDependingOnAction(this.character.imagesHurt);
-        //                     // chicken.animateImagesDependingOnAction(level.enemies[i].imagesDead[chicken.type]);
-        //                 }
-        //             });
-        //         };
-        //     });
-        // }, 200);
+        setIntervalIds(this.checkCollisionWithEnemy.bind(this), 200);
     }
 
 
-   
+    checkCollisionWithEnemy() {
+        this.enemies.forEach((chicken) => {
+            if (this.character.isColliding(chicken) && chicken.alive) {
+                this.character.hit();
+                this.character.setStatusBar(this);
+            };
+        });
+    }
 
 
 
@@ -132,7 +124,7 @@ class World {
 
     drawStatusBars() {
         this.statusBars.forEach(statusBar => {
-            if (this.camera_x) statusBar.x = 20 - this.camera_x;
+            if (this.camera_x) statusBar.x = 20 - this.camera_x - 80;
         })
         this.addObjectsFromArrayToMap(this.statusBars);
     }
