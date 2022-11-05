@@ -45,39 +45,18 @@ class World {
 
 
     checkCollisions() {
-        // setInterval(this.character.checkCollisionWithCollectableThings, 200, level.bottles, this.character);
-        // setInterval(this.character.checkCollisionWithCollectableThings, 200, level.coins, this.character);
-        setInterval(() => {
-            this.bottles.forEach((bottle, i) => {
-                if (this.character.isColliding(bottle)) {
-                    this.statusBars.forEach(statusBar => {
-                        if (statusBar.type == 'bottle' && statusBar.value + 20 <= 100) {
-                            this.bottles.splice(i, 1);
-                            statusBar.value += 20;
-                            statusBar.img.src = `img/7_statusbars/1_statusbar/3_statusbar_bottle/green/${statusBar.value}.png`;
-                            this.character.playSound(this.character.audio.audioBottle, 0.3);
-                        }
-                    });
-                };
-            });
-        }, 200);
-
-        setInterval(() => {
-            this.coins.forEach((coin, i) => {
-                if (this.character.isColliding(coin)) {
-                    this.statusBars.forEach(statusBar => {
-                        if (statusBar.type == 'coin' && statusBar.value + 20 <= 100) {
-                            this.coins.splice(i, 1);
-                            statusBar.value += 20;
-                            statusBar.img.src = `img/7_statusbars/1_statusbar/1_statusbar_coin/green/${statusBar.value}.png`
-                            this.character.playSound(this.character.audio.audioCoins, 0.3);
-                        }
-                    });
-                };
-            });
-        }, 200);
-
         setIntervalIds(this.checkCollisionWithEnemy.bind(this), 200);
+        setIntervalIds(this.checkCollisionWithCollectableThings.bind(this, this.bottles), 200);
+        setIntervalIds(this.checkCollisionWithCollectableThings.bind(this, this.coins), 200);
+    }
+
+
+    checkCollisionWithCollectableThings(objArray) {
+        objArray.forEach((obj, i) => {
+            if(this.character.isColliding(obj)) {
+                this.character.setStatusBar(this, obj, i);
+            }
+        });
     }
 
 
@@ -85,14 +64,10 @@ class World {
         this.enemies.forEach((chicken) => {
             if (this.character.isColliding(chicken) && chicken.alive) {
                 this.character.hit();
-                this.character.setStatusBar(this);
+                this.character.setStatusBar(this, chicken);
             };
         });
     }
-
-
-
-
 
     clearCanvas() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
